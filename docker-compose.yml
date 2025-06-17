@@ -12,7 +12,7 @@ services:
 
   backend:
     build: ./backend
-    image: fahadbashir644/bidding:bidding-backend
+    image: fahadbashir644/bidding:backend
     ports:
       - "8088:8088"
     env_file:
@@ -22,7 +22,7 @@ services:
 
   frontend:
     build: ./frontend
-    image: fahadbashir644/bidding:bidding-frontend
+    image: fahadbashir644/bidding:frontend
     ports:
       - "5173:5173"
     depends_on:

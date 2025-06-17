@@ -15,7 +15,7 @@ export default function App() {
 
   const fetchItems = async () => {
     try {
-      const res = await axios.get("http://localhost:8088/items");
+      const res = await axios.get("http://16.171.177.188:8088/items");
       setItems(res.data);
     } catch (err) {
       toast.error("Could not load auction items.");
@@ -24,7 +24,7 @@ export default function App() {
 
   const handleCreate = async (formData: any) => {
     try {
-      await axios.post("http://localhost:8088/items", formData);
+      await axios.post("http://16.171.177.188:8088/items", formData);
       fetchItems();
       toast.success("Item created successfully!");
     } catch (err: any) {
