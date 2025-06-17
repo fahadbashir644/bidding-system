@@ -57,9 +57,10 @@ jobs:
         ssh -o StrictHostKeyChecking=no -i fahad.bashir.pem ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
           sudo su
           cd ~/bidding-app
-          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/bidding:backend
-          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/bidding:frontend
-          sudo docker compose down
-          sudo docker compose up -d
-          docker image prune -af --filter "until=1h"
+          docker rm -vf $(docker ps -aq)
+          docker rmi -f $(docker images -aq)
+          docker pull ${{ secrets.DOCKER_USERNAME }}/bidding:backend
+          docker pull ${{ secrets.DOCKER_USERNAME }}/bidding:frontend
+          docker compose down
+          docker compose up -d
         EOF
