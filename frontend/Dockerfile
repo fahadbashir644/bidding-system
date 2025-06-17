@@ -8,7 +8,7 @@ RUN npm install
 
 COPY . .
 
-# RUN npm run build
+RUN npm run build
 
 # Use a minimal web server to serve the React app
 FROM nginx:alpine
