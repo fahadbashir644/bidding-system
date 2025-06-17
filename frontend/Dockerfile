@@ -11,14 +11,14 @@ COPY . .
 # RUN npm run build
 
 # Use a minimal web server to serve the React app
-# FROM nginx:alpine
-# COPY --from=0 /app/dist /usr/share/nginx/html
+FROM nginx:alpine
+COPY --from=0 /app/dist /usr/share/nginx/html
 
 # Expose the port the app runs on
 EXPOSE 5173
 
 # Command to run the web server
-# CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
 
 ##For localhost
-CMD ["npm", "run", "dev", "--", "--host"]
+# CMD ["npm", "run", "dev", "--", "--host"]
