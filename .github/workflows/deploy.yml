@@ -48,6 +48,7 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_SSH_KEY }}
         script: |
+          sudo su
           cd ~/bidding-app
           docker pull ${{ secrets.DOCKER_USERNAME }}/bidding:backend
           docker pull ${{ secrets.DOCKER_USERNAME }}/bidding:frontend
