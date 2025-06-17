@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -32,25 +37,27 @@ jobs:
         docker build -t ${{ secrets.DOCKER_USERNAME }}/bidding:frontend ./frontend
         docker push ${{ secrets.DOCKER_USERNAME }}/bidding:frontend
 
+    - name: Save SSH key
+      run: |
+        echo "${{ secrets.SERVER_SSH_KEY }}" > fahad.bashir.pem
+        chmod 600 fahad.bashir.pem
+
     - name: Upload docker-compose.yml to EC2
-      uses: appleboy/scp-action@v0.1.7
-      with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_SSH_KEY }}
-        source: "docker-compose.yml"
-        target: "~/bidding-app"
+      run: |
+        scp -o StrictHostKeyChecking=no -i fahad.bashir.pem docker-compose.yml ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:~/bidding-app/docker-compose.yml
+
+    - name: Upload backend .env file to EC2
+      run: |
+        echo "${{ secrets.BACKEND_ENV_FILE }}" > backend.env
+        scp -o StrictHostKeyChecking=no -i fahad.bashir.pem backend.env ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USER }}/bidding-app/backend/.env
 
     - name: Deploy to EC2
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_SSH_KEY }}
-        script: |
+      run: |
+        ssh -o StrictHostKeyChecking=no -i fahad.bashir.pem ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
           sudo su
           cd ~/bidding-app
-          docker pull ${{ secrets.DOCKER_USERNAME }}/bidding:backend
-          docker pull ${{ secrets.DOCKER_USERNAME }}/bidding:frontend
-          docker-compose down
-          docker-compose up -d
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/bidding:backend
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/bidding:frontend
+          sudo docker compose down
+          sudo docker compose up -d
+        EOF
