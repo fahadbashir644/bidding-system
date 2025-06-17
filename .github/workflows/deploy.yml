@@ -49,6 +49,7 @@ jobs:
     - name: Upload backend .env file to EC2
       run: |
         echo "${{ secrets.BACKEND_ENV_FILE }}" > backend.env
+        ssh -o StrictHostKeyChecking=no -i fahad.bashir.pem ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "mkdir -p ~/bidding-app/backend"
         scp -o StrictHostKeyChecking=no -i fahad.bashir.pem backend.env ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USER }}/bidding-app/backend/.env
 
     - name: Deploy to EC2
