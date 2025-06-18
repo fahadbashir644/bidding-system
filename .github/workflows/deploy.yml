@@ -39,7 +39,7 @@ jobs:
 
     - name: Save SSH key
       run: |
-        echo "${{ secrets.DROPLET_KEY }}" > droplet.pem
+        echo "${{ secrets.DROPLET_SSH_KEY }}" > droplet.pem
         chmod 600 droplet.pem
 
     - name: Upload docker-compose.yml to Droplet
