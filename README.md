@@ -4,6 +4,9 @@ A full-stack real-time auction application built using **React (Vite)**, **NestJ
 
 ---
 
+## App Url
+[http://159.65.148.214:5173]
+
 ## 🚀 Tech Stack
 
 - **Frontend:** React (Vite), Bootstrap 5
