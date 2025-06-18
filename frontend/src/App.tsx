@@ -24,7 +24,7 @@ export default function App() {
 
   const handleCreate = async (formData: any) => {
     try {
-      await axios.post("http://16.171.177.188:8088/items", formData);
+      await axios.post("http://159.65.148.214:8088/items", formData);
       fetchItems();
       toast.success("Item created successfully!");
     } catch (err: any) {
