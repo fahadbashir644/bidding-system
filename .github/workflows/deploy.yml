@@ -1,4 +1,4 @@
-name: Deploy to AWS EC2
+name: Deploy to DigitalOcean Droplet
 
 on:
   push:
@@ -39,28 +39,27 @@ jobs:
 
     - name: Save SSH key
       run: |
-        echo "${{ secrets.SERVER_SSH_KEY }}" > fahad.bashir.pem
-        chmod 600 fahad.bashir.pem
+        echo "${{ secrets.DROPLET_KEY }}" > droplet.pem
+        chmod 600 droplet.pem
 
-    - name: Upload docker-compose.yml to EC2
+    - name: Upload docker-compose.yml to Droplet
       run: |
-        scp -o StrictHostKeyChecking=no -i fahad.bashir.pem docker-compose.yml ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:~/bidding-app/docker-compose.yml
+        scp -o StrictHostKeyChecking=no -i droplet.pem docker-compose.yml root@159.65.148.214:/root/bidding-app/docker-compose.yml
 
-    - name: Upload backend .env file to EC2
+    - name: Upload backend .env file to Droplet
       run: |
         echo "${{ secrets.BACKEND_ENV_FILE }}" > backend.env
-        ssh -o StrictHostKeyChecking=no -i fahad.bashir.pem ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "mkdir -p ~/bidding-app/backend"
-        scp -o StrictHostKeyChecking=no -i fahad.bashir.pem backend.env ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USER }}/bidding-app/backend/.env
+        ssh -o StrictHostKeyChecking=no -i droplet.pem root@159.65.148.214 "mkdir -p /root/bidding-app/backend"
+        scp -o StrictHostKeyChecking=no -i droplet.pem backend.env root@159.65.148.214:/root/bidding-app/backend/.env
 
-    - name: Deploy to EC2
+    - name: Deploy to Droplet
       run: |
-        ssh -o StrictHostKeyChecking=no -i fahad.bashir.pem ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
-          sudo su
-          cd ~/bidding-app
-          docker rm -vf $(docker ps -aq)
-          docker rmi -f $(docker images -aq)
+        ssh -o StrictHostKeyChecking=no -i droplet.pem root@159.65.148.214 << 'EOF'
+          cd /root/bidding-app
+          docker rm -vf $(docker ps -aq) || true
+          docker rmi -f $(docker images -aq) || true
           docker pull ${{ secrets.DOCKER_USERNAME }}/bidding:backend
           docker pull ${{ secrets.DOCKER_USERNAME }}/bidding:frontend
-          docker compose down
+          docker compose down || true
           docker compose up -d
         EOF

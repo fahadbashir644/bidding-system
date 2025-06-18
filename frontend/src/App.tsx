@@ -15,7 +15,7 @@ export default function App() {
 
   const fetchItems = async () => {
     try {
-      const res = await axios.get("http://16.171.177.188:8088/items");
+      const res = await axios.get("http://159.65.148.214:8088/items");
       setItems(res.data);
     } catch (err) {
       toast.error("Could not load auction items.");

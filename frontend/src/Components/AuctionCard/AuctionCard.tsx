@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 
-const socket = io("http://16.171.177.188:8088");
+const socket = io("http://159.65.148.214:8088");
 
 export const AuctionCard: React.FC<AuctionCardProps> = ({ item }) => {
   const [bidInput, setBidInput] = useState<number>(0);
@@ -43,7 +43,7 @@ export const AuctionCard: React.FC<AuctionCardProps> = ({ item }) => {
     }
 
     try {
-      const res = await axios.post(`http://16.171.177.188:8088/items/bid`, {
+      const res = await axios.post(`http://159.65.148.214:8088/items/bid`, {
         itemId: itemId,
         amount: bidAmount,
       });
