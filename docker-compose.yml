@@ -24,7 +24,7 @@ services:
     build: ./frontend
     image: fahadbashir644/bidding:frontend
     ports:
-      - "5173:5173"
+      - "5173:80"
     depends_on:
       - backend
 
