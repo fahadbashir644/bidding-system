@@ -1,14 +1,16 @@
-import { Column, DataType, Model, Table, ForeignKey } from 'sequelize-typescript';
+import { Column, DataType, Model, Table, ForeignKey, Index } from 'sequelize-typescript';
 import { Item } from '../item/item.model';
 import { User } from '../user/user.model';
 
 @Table({ tableName: 'bids' })
 export class Bid extends Model {
   @ForeignKey(() => Item)
+  @Index
   @Column({ type: DataType.UUID })
   itemId: string;
 
   @ForeignKey(() => User)
+  @Index
   @Column({ type: DataType.UUID })
   userId: string;
 
