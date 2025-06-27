@@ -32,6 +32,7 @@ export class BidService {
   });
 
   const currentAmount = highestBid?.amount || item.startingPrice;
+  console.log('highes bid ', currentAmount);
   if (amount <= currentAmount) {
     throw new BadRequestException('Bid must be higher than current bid');
   }
@@ -47,6 +48,7 @@ export class BidService {
       { where: { id: item.id, version: item.version } }
     );
 
+    console.log('Version ', item.version);
     if (updatedCount === 0) {
       const latest = await this.bidModel.findOne({
         where: { itemId },
@@ -54,6 +56,8 @@ export class BidService {
       });
 
       const latestAmount = latest?.amount || item.startingPrice;
+      console.log('current Bid', amount);
+      console.log('Latest bid', latestAmount);
       if (amount <= latestAmount) {
         throw new BadRequestException('A higher bid already exists');
       }
