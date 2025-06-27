@@ -29,9 +29,10 @@ export class BidService {
   const highestBid = await this.bidModel.findOne({
     where: { itemId },
     order: [['amount', 'DESC']],
+    raw: true
   });
 
-  const currentAmount = highestBid?.get('amount') || item.startingPrice;
+  const currentAmount = highestBid?.amount || item.startingPrice;
   console.log('highest bid ', highestBid);
   console.log('current amount ', amount);
   console.log('highest amount ', currentAmount);
@@ -55,9 +56,10 @@ export class BidService {
       const latest = await this.bidModel.findOne({
         where: { itemId },
         order: [['amount', 'DESC']],
+        raw: true
       });
 
-      const latestAmount = latest?.get('amount') || item.startingPrice;
+      const latestAmount = latest?.amount || item.startingPrice;
       console.log('current Bid', amount);
       console.log('Latest bid', latestAmount);
       if (amount <= latestAmount) {
