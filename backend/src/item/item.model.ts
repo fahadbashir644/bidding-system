@@ -2,7 +2,7 @@ import { Column, DataType, Model, Table, PrimaryKey, Default, HasMany } from 'se
 import { Bid } from '../bid/bid.model';
 import { v4 as uuidv4 } from 'uuid';
 
-@Table({ tableName: 'items' })
+@Table({ tableName: 'items', version: true })
 export class Item extends Model {
   @PrimaryKey
   @Default(uuidv4)
@@ -20,6 +20,9 @@ export class Item extends Model {
 
   @Column({ type: DataType.DATE, allowNull: false })
   endTime: Date;
+
+  @Column({ type: DataType.INTEGER, defaultValue: 0 })
+  declare version: number;
 
   @HasMany(() => Bid)
   bids?: Bid[];

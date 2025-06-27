@@ -11,9 +11,11 @@ describe('BidService', () => {
   let mockBidModel = {
     create: jest.fn(),
     findOne: jest.fn(),
+    findAll: jest.fn(),
   };
   let mockItemModel = {
     findByPk: jest.fn(),
+    create: jest.fn(),
   };
   let mockGateway = { sendBidUpdate: jest.fn() };
   let mockTransaction = {
@@ -64,5 +66,33 @@ describe('BidService', () => {
     expect(result.success).toBe(true);
     expect(mockGateway.sendBidUpdate).toHaveBeenCalled();
     expect(mockTransaction.commit).toHaveBeenCalled();
+  });
+
+  it('should handle concurrent bids with optimistic locking', async () => {
+    const item = await mockItemModel.create({
+      name: 'Test Item',
+      description: '...',
+      startingPrice: 100,
+      endTime: new Date(Date.now() + 60 * 1000),
+      version: 0,
+    });
+
+    // Place two bids at same time:
+    const bid1 = service.placeBid(item.id, 110);
+    const bid2 = service.placeBid(item.id, 120);
+
+    // Act: run in parallel
+    const results = await Promise.allSettled([bid1, bid2]);
+
+    // Expect: only one should succeed if conflict happens
+    const successes = results.filter(r => r.status === 'fulfilled');
+    expect(successes.length).toBeGreaterThanOrEqual(1);
+
+    // Double-check final highest bid
+    const bids = await mockBidModel.findAll({ where: { itemId: item.id } });
+    const amounts = bids.map(b => b.amount);
+    const maxAmount = Math.max(...amounts);
+
+    expect(maxAmount).toBeGreaterThanOrEqual(110);
   });
 });

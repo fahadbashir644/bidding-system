@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Item } from './item.model';
 import { CreateItemDto } from './dto/create-item.dto';
+import { Bid } from 'src/bid/bid.model';
+import { User } from 'src/user/user.model';
 
 @Injectable()
 export class ItemService {
@@ -16,7 +18,12 @@ export class ItemService {
 
   async findAll(): Promise<Item[]> {
     return await this.itemModel.findAll({
-      include: { all: true },
+      include: [
+        {
+          model: Bid,
+          include: [User],
+        },
+      ],
     });
   }
 

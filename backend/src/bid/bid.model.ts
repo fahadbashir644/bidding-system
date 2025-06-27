@@ -1,4 +1,4 @@
-import { Column, DataType, Model, Table, ForeignKey, Index } from 'sequelize-typescript';
+import { Column, DataType, Model, Table, ForeignKey, Index, BelongsTo } from 'sequelize-typescript';
 import { Item } from '../item/item.model';
 import { User } from '../user/user.model';
 
@@ -16,4 +16,7 @@ export class Bid extends Model {
 
   @Column({ type: DataType.FLOAT })
   amount: number;
+
+  @BelongsTo(() => User)
+  user: User;
 }
