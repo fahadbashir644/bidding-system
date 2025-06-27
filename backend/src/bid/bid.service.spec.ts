@@ -17,6 +17,7 @@ describe('BidService', () => {
   let mockItemModel = {
     findByPk: jest.fn(),
     create: jest.fn(),
+    update: jest.fn().mockResolvedValue([1])
   };
   let mockUserModel = { findAll: jest.fn().mockResolvedValue([{ id: 1, name: 'John Doe' }]), };
   let mockGateway = { sendBidUpdate: jest.fn() };
