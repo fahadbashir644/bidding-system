@@ -32,7 +32,9 @@ export class BidService {
   });
 
   const currentAmount = highestBid?.amount || item.startingPrice;
-  console.log('highes bid ', currentAmount);
+  console.log('highest bid ', highestBid);
+  console.log('current amount ', amount);
+  console.log('highest amount ', currentAmount);
   if (amount <= currentAmount) {
     throw new BadRequestException('Bid must be higher than current bid');
   }
