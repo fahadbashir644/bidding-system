@@ -65,7 +65,6 @@ export const AuctionCard: React.FC<AuctionCardProps> = ({ item }) => {
         return;
       }
 
-      setCurrentBid(bidInput);
       toast.success("Bid placed successfully");
       setBidInput(0);
     } catch (err: any) {

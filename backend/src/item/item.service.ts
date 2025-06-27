@@ -21,6 +21,8 @@ export class ItemService {
       include: [
         {
           model: Bid,
+          separate: true,
+          order: [['amount', 'DESC']],
           include: [User],
         },
       ],
