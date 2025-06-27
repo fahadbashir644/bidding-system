@@ -31,7 +31,7 @@ export class BidService {
     order: [['amount', 'DESC']],
   });
 
-  const currentAmount = highestBid?.amount || item.startingPrice;
+  const currentAmount = highestBid?.get('amount') || item.startingPrice;
   console.log('highest bid ', highestBid);
   console.log('current amount ', amount);
   console.log('highest amount ', currentAmount);
@@ -57,7 +57,7 @@ export class BidService {
         order: [['amount', 'DESC']],
       });
 
-      const latestAmount = latest?.amount || item.startingPrice;
+      const latestAmount = latest?.get('amount') || item.startingPrice;
       console.log('current Bid', amount);
       console.log('Latest bid', latestAmount);
       if (amount <= latestAmount) {
