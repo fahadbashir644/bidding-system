@@ -4,7 +4,7 @@ import { Bid } from './bid.model';
 import { Item } from '../item/item.model';
 import { BidGateway } from './bid.gateway';
 import { Sequelize } from 'sequelize-typescript';
-import { User } from 'src/user/user.model';
+import { User } from '../user/user.model';
 import { OptimisticLockError } from 'sequelize';
 
 @Injectable()

@@ -1,5 +1,5 @@
 import { Column, Model, PrimaryKey, Table, Default, DataType, HasMany } from 'sequelize-typescript';
-import { Bid } from 'src/bid/bid.model';
+import { Bid } from '../bid/bid.model';
 import { UUIDTypes, v4 as uuidv4 } from 'uuid';
 
 @Table({ tableName: 'users' })
